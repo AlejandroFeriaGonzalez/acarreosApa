@@ -1,1 +1,23 @@
-<p>header works!</p>
+<nav class="bg-gray-800">
+  <div class="container mx-auto flex justify-between items-center py-4">
+    <a class="text-white text-lg font-bold" routerLink="/">Mi App Moderna</a>
+
+    <div class="flex items-center">
+      @if (authService.isLoggedIn()) {
+      <a class="text-white flex items-center mr-4" routerLink="/profile">
+        @if (authService.currentUser()?.avatarUrl; as avatarUrl) {
+        <img [ngSrc]="avatarUrl" [alt]="authService.currentUser()?.name" class="w-8 h-8 rounded-full mr-2">
+        }
+        {{ authService.currentUser()?.name }}
+      </a>
+      <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" (click)="authService.logout()">
+        Cerrar Sesión
+      </button>
+      } @else {
+      <a class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" routerLink="/login">
+        Iniciar Sesión
+      </a>
+      }
+    </div>
+  </div>
+</nav>

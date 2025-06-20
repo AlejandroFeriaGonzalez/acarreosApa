@@ -1,1 +1,5 @@
-<p>profile works!</p>
+<h2>Página de Perfil (Ruta Protegida)</h2>
+@if(authService.currentUser(); as user) {
+  <p>¡Bienvenido, {{ user.name }}!</p>
+  <p>Tu correo es: {{ user.email }}</p>
+}

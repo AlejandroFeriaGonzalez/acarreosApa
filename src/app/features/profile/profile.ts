@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-profile',
@@ -7,5 +8,5 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Profile {
-
+  authService = inject(Auth)
 }
