@@ -1,49 +1,27 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
+    // Carga el componente de la página de inicio
     loadComponent: () =>
-      import('./features/home/home').then((m) => m.Home),
+      import('./features/home/home.component').then((c) => c.HomeComponent),
   },
   {
-    path: 'auth',
+    path: 'login',
+    // Carga el componente de login
     loadComponent: () =>
-      import('./features/auth/auth.component').then((m) => m.AuthComponent),
+      import('./features/login/login.component').then((c) => c.LoginComponent),
   },
   {
-    path: 'dashboard',
+    path: 'profile',
+    // Carga el componente de perfil
     loadComponent: () =>
-      import('./features/dashboard/dashboard.component').then(
-        (m) => m.DashboardComponent
-      ),
+      import('./features/profile/profile.component').then((c) => c.ProfileComponent),
+    // Protegemos la ruta con nuestra guardia funcional
+    canActivate: [authGuard], 
   },
-  {
-    path: 'order/new',
-    loadComponent: () =>
-      import('./features/order/new-order.component').then(
-        (m) => m.NewOrderComponent
-      ),
-  },
-  {
-    path: 'order/:id/track',
-    loadComponent: () =>
-      import('./features/order/track-order.component').then(
-        (m) => m.TrackOrderComponent
-      ),
-  },
-  {
-    path: 'inventory',
-    loadComponent: () =>
-      import('./features/inventory/inventory.component').then(
-        (m) => m.InventoryComponent
-      ),
-  },
-  {
-    path: 'quotes',
-    loadComponent: () =>
-      import('./features/quotes/quotes.component').then(
-        (m) => m.QuotesComponent
-      ),
-  },
+  // Redirección para cualquier otra ruta
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
