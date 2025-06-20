@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, computed, effect } from '@angular/core';
 
 export interface User {
   username: string;
@@ -7,30 +7,64 @@ export interface User {
   avatarUrl?: string; // https://unavatar.io/{username}
 }
 
+const initialUser = (): User | null => {
+  if (typeof window === 'undefined' || !window.localStorage) {
+    return null;
+  }
+  const storedUser = localStorage.getItem('currentUser');
+  if (!storedUser) {
+    return null;
+  }
+  try {
+    const user = JSON.parse(storedUser);
+    // Validate that the parsed object is a user
+    if (user && typeof user.username === 'string' && typeof user.name === 'string' && typeof user.role === 'string') {
+      return user;
+    }
+    return null;
+  } catch (e) {
+    console.error('Failed to parse user from localStorage', e);
+    return null;
+  }
+};
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  private readonly VALID_USERNAME = 'sergiogay';
+  private readonly VALID_USERNAME = 'sergio';
   private readonly VALID_PASSWORD = '12345678';
-  
-  private currentUser = signal<User | null>(null);
-  
-  isAuthenticated = signal<boolean>(false);
-  user = this.currentUser.asReadonly();
 
-  login(username: string, password: string): boolean {
+  private currentUser = signal<User | null>(initialUser());
+
+  user = this.currentUser.asReadonly();
+  isAuthenticated = computed(() => !!this.user());
+
+  constructor() {
+    effect(() => {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const user = this.currentUser();
+        if (user) {
+          localStorage.setItem('currentUser', JSON.stringify(user));
+        } else {
+          localStorage.removeItem('currentUser');
+        }
+      }
+    });
+  }
+
+  async login(username: string, password: string): Promise<boolean> {
+    // Simular una llamada de red
+    await new Promise(resolve => setTimeout(resolve, 1000));
     if (username === this.VALID_USERNAME && password === this.VALID_PASSWORD) {
       const user: User = {
         username: this.VALID_USERNAME,
         name: 'Sergio García',
         role: 'Coordinador de Envíos',
-        avatarUrl: `https://unavatar.io/${username}` // URL del avatar
+        avatarUrl: `https://unavatar.io/${username}`, // URL del avatar
       };
-      
+
       this.currentUser.set(user);
-      this.isAuthenticated.set(true);
-      localStorage.setItem('currentUser', JSON.stringify(user));
       return true;
     }
     return false;
@@ -38,16 +72,5 @@ export class AuthService {
 
   logout(): void {
     this.currentUser.set(null);
-    this.isAuthenticated.set(false);
-    localStorage.removeItem('currentUser');
-  }
-
-  checkStoredAuth(): void {
-    const storedUser = localStorage.getItem('currentUser');
-    if (storedUser) {
-      const user = JSON.parse(storedUser);
-      this.currentUser.set(user);
-      this.isAuthenticated.set(true);
-    }
   }
 }

@@ -40,7 +40,7 @@ export class Login {
       const { username, password } = this.loginForm.value;
       const success = this.authService.login(username!, password!);
 
-      if (success) {
+      if (await success) {
         this.router.navigate(['/dashboard']);
       } else {
         this.loginError.set(true);
