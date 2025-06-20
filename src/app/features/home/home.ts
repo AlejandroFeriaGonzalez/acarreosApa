@@ -20,4 +20,8 @@ export class Home {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
+
+  navigateToNuevoEnvio() {
+    this.router.navigate(['/nuevo-envio']);
+  }
 }

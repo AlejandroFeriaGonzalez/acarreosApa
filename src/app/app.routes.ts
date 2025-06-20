@@ -21,6 +21,14 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'nuevo-envio',
+    loadComponent: () =>
+      import('./features/nuevo-envio/nuevo-envio.component').then(
+        (m) => m.NuevoEnvioComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
     path: '**',
     redirectTo: '/dashboard',
   },
