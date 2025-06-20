@@ -1,25 +1,27 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './guards/auth-guard.js';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    // Carga el componente de la página de inicio
-    loadComponent: () => import('./features/home/home').then((c) => c.Home),
+    redirectTo: '/dashboard',
+    pathMatch: 'full',
   },
   {
     path: 'login',
-    // Carga el componente de login
-    loadComponent: () => import('./features/login/login').then((c) => c.Login),
+    loadComponent: () =>
+      import('./components/login/login.component').then((m) => m.LoginComponent),
   },
   {
-    path: 'profile',
-    // Carga el componente de perfil
+    path: 'dashboard',
     loadComponent: () =>
-      import('./features/profile/profile').then((c) => c.Profile),
-    // Protegemos la ruta con nuestra guardia funcional
+      import('./components/dashboard/dashboard.component').then(
+        (m) => m.DashboardComponent
+      ),
     canActivate: [authGuard],
   },
-  // Redirección para cualquier otra ruta
-  { path: '**', redirectTo: '', pathMatch: 'full' },
+  {
+    path: '**',
+    redirectTo: '/dashboard',
+  },
 ];
