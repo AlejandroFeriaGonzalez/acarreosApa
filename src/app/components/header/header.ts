@@ -1,7 +1,7 @@
 import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Auth } from '../../services/auth';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -10,5 +10,5 @@ import { Auth } from '../../services/auth';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Header {
-  authService = inject(Auth);
+  authService = inject(AuthService);
 }

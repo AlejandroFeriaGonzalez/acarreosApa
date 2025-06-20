@@ -1,5 +1,51 @@
-<h2>Iniciar Sesión</h2>
-<p>Esta página se cargó con lazy loading. Haz clic para simular un inicio de sesión.</p>
-<button class="btn btn-primary" (click)="authService.login()">
-  Simular Login
-</button>
+<div class="flex items-center justify-center min-h-screen bg-gradient-to-r from-indigo-500 to-purple-500 p-5">
+  <div class="bg-white rounded-lg shadow-lg p-10 w-full max-w-md">
+    <div class="text-center mb-8">
+      <h1 class="text-2xl font-bold text-gray-800">AcarreosAPA</h1>
+      <p class="text-gray-600">Sistema de Gestión de Envíos</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-700">Usuario</label>
+        <input id="username" type="text" formControlName="username"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          placeholder="Ingresa tu usuario">
+        @if (loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
+        <span class="text-sm text-red-600">El usuario es requerido</span>
+        }
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+        <input id="password" type="password" formControlName="password"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          placeholder="Ingresa tu contraseña">
+        @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+        <span class="text-sm text-red-600">La contraseña debe tener al menos 8 caracteres</span>
+        }
+      </div>
+
+      @if (loginError()) {
+      <div class="bg-red-100 text-red-700 p-3 rounded-md text-center">
+        <span>Credenciales incorrectas. Intenta nuevamente.</span>
+      </div>
+      }
+
+      <button type="submit" [disabled]="loginForm.invalid || isLoading()"
+        class="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white py-2 px-4 rounded-md shadow-md hover:opacity-90 disabled:opacity-50">
+        @if (isLoading()) {
+        Iniciando sesión...
+        } @else {
+        Iniciar Sesión
+        }
+      </button>
+    </form>
+
+    <div class="mt-8 bg-gray-100 p-4 rounded-md text-center text-sm">
+      <p><strong>Demo:</strong></p>
+      <p>Usuario: sergiogay</p>
+      <p>Contraseña: 12345678</p>
+    </div>
+  </div>
+</div>

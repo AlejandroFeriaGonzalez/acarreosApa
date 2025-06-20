@@ -10,13 +10,13 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () =>
-      import('./components/login/login.component').then((m) => m.LoginComponent),
+      import('./features/login/login').then((m) => m.Login),
   },
   {
     path: 'dashboard',
     loadComponent: () =>
-      import('./components/dashboard/dashboard.component').then(
-        (m) => m.DashboardComponent
+      import('./features/home/home').then(
+        (m) => m.Home
       ),
     canActivate: [authGuard],
   },

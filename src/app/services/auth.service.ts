@@ -4,6 +4,7 @@ export interface User {
   username: string;
   name: string;
   role: string;
+  avatarUrl?: string; // https://unavatar.io/{username}
 }
 
 @Injectable({
@@ -23,7 +24,8 @@ export class AuthService {
       const user: User = {
         username: this.VALID_USERNAME,
         name: 'Sergio García',
-        role: 'Coordinador de Envíos'
+        role: 'Coordinador de Envíos',
+        avatarUrl: `https://unavatar.io/${username}` // URL del avatar
       };
       
       this.currentUser.set(user);
