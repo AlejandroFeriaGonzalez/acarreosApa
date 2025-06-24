@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
+import { UserRole } from './services/auth.service';
 
 export const routes: Routes = [
   {
@@ -9,16 +10,20 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    loadComponent: () =>
-      import('./features/login/login').then((m) => m.Login),
+    loadComponent: () => import('./features/login/login').then((m) => m.Login),
   },
   {
     path: 'dashboard',
-    loadComponent: () =>
-      import('./features/home/home').then(
-        (m) => m.Home
-      ),
+    loadComponent: () => import('./features/home/home').then((m) => m.Home),
     canActivate: [authGuard],
+  },
+  // viewer
+  {
+    path: 'viewer',
+    loadComponent: () =>
+      import('./features/dashboard/dashboard').then((m) => m.Dashboard),
+    canActivate: [authGuard],
+    data: { role: UserRole.Viewer },
   },
   {
     path: 'nuevo-envio',

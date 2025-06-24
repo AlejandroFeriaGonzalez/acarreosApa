@@ -1,9 +1,16 @@
 import { Injectable, signal, computed, effect } from '@angular/core';
+import { Router } from '@angular/router';
+
+export enum UserRole {
+  Admin = 'admin',
+  Editor = 'editor',
+  Viewer = 'viewer'
+}
 
 export interface User {
   username: string;
   name: string;
-  role: string;
+  role: UserRole;
   avatarUrl?: string; // https://unavatar.io/{username}
 }
 
@@ -36,11 +43,12 @@ export class AuthService {
   private readonly VALID_PASSWORD = '12345678';
 
   private currentUser = signal<User | null>(initialUser());
+  private userRole = signal<UserRole | null>(null);
 
   user = this.currentUser.asReadonly();
   isAuthenticated = computed(() => !!this.user());
 
-  constructor() {
+  constructor(private router: Router) {
     effect(() => {
       if (typeof window !== 'undefined' && window.localStorage) {
         const user = this.currentUser();
@@ -60,7 +68,7 @@ export class AuthService {
       const user: User = {
         username: this.VALID_USERNAME,
         name: 'Sergio García',
-        role: 'Coordinador de Envíos',
+        role: UserRole.Admin,
         avatarUrl: `https://unavatar.io/${username}`, // URL del avatar
       };
 
@@ -72,5 +80,15 @@ export class AuthService {
 
   logout(): void {
     this.currentUser.set(null);
+    this.userRole.set(null);
+    this.router.navigate(['/login']);
+  }
+
+  setUserRole(role: UserRole) {
+    this.userRole.set(role);
+  }
+
+  getUserRole() {
+    return this.userRole.asReadonly();
   }
 }
